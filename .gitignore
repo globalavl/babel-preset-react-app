@@ -1,0 +1,13 @@
+/node_modules
+messages.mo
+.DS_Store
+.idea
+.tmp
+.git
+.settings
+*.log
+.vscode
+dist
+bundle
+coverage
+.scannerwork
