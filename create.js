@@ -102,7 +102,6 @@ module.exports = function(api, opts, env) {
           // Will use the native built-in instead of trying to polyfill
           // behavior for any plugins that require one.
           useBuiltIns: true,
-          useSpread: true,
           exclude: [
             'transform-typeof-symbol',
             "transform-regenerator",
