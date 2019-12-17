@@ -40,7 +40,7 @@ module.exports = function(api, opts, env) {
     opts.typescript,
     false
   );
-  var areHelpersEnabled = validateBoolOption('helpers', opts.helpers, false);
+  var areHelpersEnabled = validateBoolOption('helpers', opts.helpers, true);
   var useAbsoluteRuntime = validateBoolOption(
     'absoluteRuntime',
     opts.absoluteRuntime,
@@ -125,30 +125,30 @@ module.exports = function(api, opts, env) {
       ],
       // Experimental macros support. Will be documented after it's had some time
       // in the wild.
-      require('babel-plugin-macros'),
+      // require('babel-plugin-macros'),
       // Necessary to include regardless of the environment because
       // in practice some other transforms (such as object-rest-spread)
       // don't work without it: https://github.com/babel/babel/issues/7215
-      [
-        require('@babel/plugin-transform-destructuring').default,
-        {
-          // Use loose mode for performance:
-          // https://github.com/facebook/create-react-app/issues/5602
-          loose: false,
-          selectiveLoose: [
-            'useState',
-            'useEffect',
-            'useContext',
-            'useReducer',
-            'useCallback',
-            'useMemo',
-            'useRef',
-            'useImperativeHandle',
-            'useLayoutEffect',
-            'useDebugValue',
-          ],
-        },
-      ],
+      // [
+      //   require('@babel/plugin-transform-destructuring').default,
+      //   {
+      //     // Use loose mode for performance:
+      //     // https://github.com/facebook/create-react-app/issues/5602
+      //     loose: false,
+      //     selectiveLoose: [
+      //       'useState',
+      //       'useEffect',
+      //       'useContext',
+      //       'useReducer',
+      //       'useCallback',
+      //       'useMemo',
+      //       'useRef',
+      //       'useImperativeHandle',
+      //       'useLayoutEffect',
+      //       'useDebugValue',
+      //     ],
+      //   },
+      // ],
       // Turn on legacy decorators for TypeScript files
       isTypeScriptEnabled && [
         require('@babel/plugin-proposal-decorators').default,
@@ -166,30 +166,30 @@ module.exports = function(api, opts, env) {
       // The following two plugins use Object.assign directly, instead of Babel's
       // extends helper. Note that this assumes `Object.assign` is available.
       // { ...todo, completed: true }
-      [
-        require('@babel/plugin-proposal-object-rest-spread').default,
-        {
-          useBuiltIns: true,
-        },
-      ],
-      // Polyfills the runtime needed for async/await, generators, and friends
-      // https://babeljs.io/docs/en/babel-plugin-transform-runtime
       // [
-      //   require('@babel/plugin-transform-runtime').default,
+      //   require('@babel/plugin-proposal-object-rest-spread').default,
       //   {
-      //     corejs: false,
-      //     helpers: areHelpersEnabled,
-      //     regenerator: true,
-      //     // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
-      //     // We should turn this on once the lowest version of Node LTS
-      //     // supports ES Modules.
-      //     useESModules,
-      //     // Undocumented option that lets us encapsulate our runtime, ensuring
-      //     // the correct version is used
-      //     // https://github.com/babel/babel/blob/090c364a90fe73d36a30707fc612ce037bdbbb24/packages/babel-plugin-transform-runtime/src/index.js#L35-L42
-      //     absoluteRuntime: absoluteRuntimePath,
+      //     useBuiltIns: true,
       //   },
       // ],
+      // Polyfills the runtime needed for async/await, generators, and friends
+      // https://babeljs.io/docs/en/babel-plugin-transform-runtime
+      [
+        require('@babel/plugin-transform-runtime').default,
+        {
+          corejs: false,
+          helpers: areHelpersEnabled,
+          regenerator: true,
+          // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
+          // We should turn this on once the lowest version of Node LTS
+          // supports ES Modules.
+          useESModules,
+          // Undocumented option that lets us encapsulate our runtime, ensuring
+          // the correct version is used
+          // https://github.com/babel/babel/blob/090c364a90fe73d36a30707fc612ce037bdbbb24/packages/babel-plugin-transform-runtime/src/index.js#L35-L42
+          absoluteRuntime: absoluteRuntimePath,
+        },
+      ],
       isEnvProduction && [
         // Remove PropTypes from production build
         require('babel-plugin-transform-react-remove-prop-types').default,
