@@ -36,7 +36,7 @@ module.exports = function(api, opts) {
   var isEnvProduction = env === 'production';
   var isEnvTest = env === 'test';
 
-  var areHelpersEnabled = validateBoolOption('helpers', opts.helpers, false);
+  var areHelpersEnabled = validateBoolOption('helpers', opts.helpers, true);
   var useAbsoluteRuntime = validateBoolOption(
     'absoluteRuntime',
     opts.absoluteRuntime,
@@ -81,7 +81,8 @@ module.exports = function(api, opts) {
             'transform-typeof-symbol',
             "transform-regenerator",
             "transform-async-to-generator",
-            "transform-arrow-functions"
+            "transform-arrow-functions",
+            "transform-classes"
           ]
         },
       ],
@@ -101,7 +102,8 @@ module.exports = function(api, opts) {
             'transform-typeof-symbol',
             "transform-regenerator",
             "transform-async-to-generator",
-            "transform-arrow-functions"
+            "transform-arrow-functions",
+            "transform-classes"
           ]
         },
       ],
@@ -132,22 +134,22 @@ module.exports = function(api, opts) {
       // ],
       // Polyfills the runtime needed for async/await, generators, and friends
       // https://babeljs.io/docs/en/babel-plugin-transform-runtime
-      // [
-      //   require('@babel/plugin-transform-runtime').default,
-      //   {
-      //     corejs: false,
-      //     helpers: areHelpersEnabled,
-      //     regenerator: true,
-      //     // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
-      //     // We should turn this on once the lowest version of Node LTS
-      //     // supports ES Modules.
-      //     useESModules: isEnvDevelopment || isEnvProduction,
-      //     // Undocumented option that lets us encapsulate our runtime, ensuring
-      //     // the correct version is used
-      //     // https://github.com/babel/babel/blob/090c364a90fe73d36a30707fc612ce037bdbbb24/packages/babel-plugin-transform-runtime/src/index.js#L35-L42
-      //     absoluteRuntime: absoluteRuntimePath,
-      //   },
-      // ],
+      [
+        require('@babel/plugin-transform-runtime').default,
+        {
+          corejs: false,
+          helpers: areHelpersEnabled,
+          regenerator: true,
+          // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
+          // We should turn this on once the lowest version of Node LTS
+          // supports ES Modules.
+          useESModules: isEnvDevelopment || isEnvProduction,
+          // Undocumented option that lets us encapsulate our runtime, ensuring
+          // the correct version is used
+          // https://github.com/babel/babel/blob/090c364a90fe73d36a30707fc612ce037bdbbb24/packages/babel-plugin-transform-runtime/src/index.js#L35-L42
+          absoluteRuntime: absoluteRuntimePath,
+        },
+      ],
       // Adds syntax support for import()
       require('@babel/plugin-syntax-dynamic-import').default,
       isEnvTest &&

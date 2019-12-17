@@ -88,7 +88,8 @@ module.exports = function(api, opts, env) {
             'transform-typeof-symbol',
             "transform-regenerator",
             "transform-async-to-generator",
-            "transform-arrow-functions"
+            "transform-arrow-functions",
+            "transform-classes"
           ]
         },
       ],
@@ -106,7 +107,8 @@ module.exports = function(api, opts, env) {
             'transform-typeof-symbol',
             "transform-regenerator",
             "transform-async-to-generator",
-            "transform-arrow-functions"
+            "transform-arrow-functions",
+            "transform-classes"
           ]
         },
       ],
