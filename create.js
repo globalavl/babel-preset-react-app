@@ -198,6 +198,10 @@ module.exports = function(api, opts, env) {
           removeImport: true,
         },
       ],
+      isEnvProduction && [
+        // Explicitly add displayName
+        require('@babel/plugin-transform-react-display-name').default,
+      ],
       // Adds syntax support for import()
       require('@babel/plugin-syntax-dynamic-import').default,
       isEnvTest &&
